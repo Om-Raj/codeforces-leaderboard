@@ -43,17 +43,17 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-import { Rating } from "@/types/types"
+import { UserData } from "@/types/types"
 import Link from "next/link"
 
-const data: Rating[] = [
+const data: UserData[] = [
   {
     handle: "omium",
     name: "Om Raj",
     regId: "2023UCS022",
     year: 2023,
     branch: "CS",
-    curRating: 1525,
+    rating: 1525,
     maxRating: 1764,
   },
   {
@@ -62,7 +62,7 @@ const data: Rating[] = [
     regId: "2022UCS045",
     year: 2022,
     branch: "CS",
-    curRating: 1890,
+    rating: 1890,
     maxRating: 1950,
   },
   {
@@ -71,7 +71,7 @@ const data: Rating[] = [
     regId: "2021ECE007",
     year: 2021,
     branch: "EC",
-    curRating: 1430,
+    rating: 1430,
     maxRating: 1600,
   },
   {
@@ -80,7 +80,7 @@ const data: Rating[] = [
     regId: "2020MTH102",
     year: 2020,
     branch: "MA",
-    curRating: 2100,
+    rating: 2100,
     maxRating: 2200,
   },
   {
@@ -89,7 +89,7 @@ const data: Rating[] = [
     regId: "2023UCS056",
     year: 2023,
     branch: "CS",
-    curRating: 980,
+    rating: 980,
     maxRating: 1200,
   },
   {
@@ -98,13 +98,13 @@ const data: Rating[] = [
     regId: "2024MECH011",
     year: 2024,
     branch: "ME",
-    curRating: 1560,
+    rating: 1560,
     maxRating: 1580,
   },
 ];
 
 
-export const columns: ColumnDef<Rating>[] = [
+export const columns: ColumnDef<UserData>[] = [
   {
     id: "rank",
     header: "Rank",
@@ -158,7 +158,7 @@ export const columns: ColumnDef<Rating>[] = [
     cell: ({ row }) => (
       <div>{row.getValue("year")}</div>
     ),
-    filterFn: (row: Row<Rating>, id: string, year: number) => {
+    filterFn: (row: Row<UserData>, id: string, year: number) => {
       return !year || row.original.year === year;
     },
   },
@@ -171,12 +171,12 @@ export const columns: ColumnDef<Rating>[] = [
     cell: ({ row }) => (
       <div>{row.getValue("branch")}</div>
     ),
-    filterFn: (row: Row<Rating>, id: string, branch: string) => {
+    filterFn: (row: Row<UserData>, id: string, branch: string) => {
       return branch === "all" || row.original.branch === branch;
     },
   },
   {
-    accessorKey: "curRating",
+    accessorKey: "rating",
     meta: {
       label: "Rating",
     },
@@ -185,13 +185,14 @@ export const columns: ColumnDef<Rating>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(true)}
+          className="px-0!"
         >
           Rating
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div>{row.getValue("curRating")}</div>,
+    cell: ({ row }) => <div>{row.getValue("rating")}</div>,
   },
   {
     accessorKey: "maxRating",
@@ -203,6 +204,7 @@ export const columns: ColumnDef<Rating>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(true)}
+          className="px-0!"
         >
           Max Rating
           <ArrowUpDown />
@@ -213,10 +215,10 @@ export const columns: ColumnDef<Rating>[] = [
   },
 ];
 
-export function LeaderBoard() {
+export function LeaderBoard({ data }: { data: UserData[] }) {
   const [sorting, setSorting] = useState<SortingState>([
     {
-      id: "curRating",
+      id: "rating",
       desc: true,
     },
   ]);

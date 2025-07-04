@@ -1,12 +1,18 @@
 import '@tanstack/react-table'
 
-export type Rating = {
+export type CF_User = {
+  handle: string,
+  rating: number,
+  maxRating: number,
+};
+
+export type UserData = {
   handle: string,
   name: string,
   regId: string,
   year: number,
   branch: string,
-  curRating: number,
+  rating: number,
   maxRating: number,
 };
 

@@ -1,11 +1,12 @@
 import { LeaderBoard } from "@/components/leaderboard";
-import prisma from "@/lib/prisma";
+import { fetchUsersData } from "@/lib/fetch";
 
 export default async function Home() {
-  const users = await prisma.user.findMany();
+  const users = await fetchUsersData();
+  console.log(users);
   return (
     <div>
-      <LeaderBoard />
+      <LeaderBoard data={users || []} />
     </div>
   );
 }
