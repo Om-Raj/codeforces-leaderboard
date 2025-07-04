@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 
 import {
   ColumnDef,
@@ -107,13 +107,11 @@ const data: Rating[] = [
 export const columns: ColumnDef<Rating>[] = [
   {
     id: "rank",
-    header: "#",
+    header: "Rank",
     meta: {
       label: "Rank",
+      isIndex: true,
     },
-    cell: ({ row }) => (
-      <div>{ row.index + 1 }</div>
-    ),
   },
   {
     accessorKey: "handle",
@@ -186,7 +184,7 @@ export const columns: ColumnDef<Rating>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(true)}
         >
           Rating
           <ArrowUpDown />
@@ -204,7 +202,7 @@ export const columns: ColumnDef<Rating>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(true)}
         >
           Max Rating
           <ArrowUpDown />
@@ -216,16 +214,20 @@ export const columns: ColumnDef<Rating>[] = [
 ];
 
 export function LeaderBoard() {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([
+    {
+      id: "curRating",
+      desc: true,
+    },
+  ]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     year: false,
     branch: false,
   });
-  const [rowSelection, setRowSelection] = useState({});
 
-  const batches = [...new Set(data.map((item) => item.year))].sort();
-  const branches = [...new Set(data.map((item) => item.branch))].sort();
+  const batches = useMemo(() => [...new Set(data.map((item) => item.year))].sort(), [data]);
+  const branches = useMemo(() => [...new Set(data.map((item) => item.branch))].sort(), [data]);
 
   const table = useReactTable({
     data,
@@ -237,31 +239,29 @@ export function LeaderBoard() {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection,
     },
   })
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4 max-w-screen-lg mx-auto">
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="Filter handle..."
-            value={(table.getColumn("handle")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("handle")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
+      <div className="flex justify-start items-center py-4 gap-3 flex-wrap xs:flex-nowrap">
+        <Input
+          placeholder="Filter handle"
+          value={(table.getColumn("handle")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("handle")?.setFilterValue(event.target.value)
+          }
+          className="w-full xs:basis-xs"
+        />
 
+        <div className="flex gap-3 grow">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
+              <Button variant="outline">
                 Year <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
@@ -283,7 +283,7 @@ export function LeaderBoard() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
+              <Button variant="outline">
                 Branch <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
@@ -302,34 +302,34 @@ export function LeaderBoard() {
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              View <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.columnDef.meta?.label ?? column.id}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                View <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.columnDef.meta?.label ?? column.id}
+                    </DropdownMenuCheckboxItem>
+                  )
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -353,16 +353,16 @@ export function LeaderBoard() {
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
+                      {cell.column.columnDef.meta?.isIndex ? index + 1 : flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
-                      )}
+                      )} 
                     </TableCell>
                   ))}
                 </TableRow>
