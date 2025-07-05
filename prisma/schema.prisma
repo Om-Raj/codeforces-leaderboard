@@ -18,4 +18,6 @@ model User {
   regId     String    @id
   name      String
   handle    String    
+  year      Int       @default(0)
+  branch    String    @default("")
 }

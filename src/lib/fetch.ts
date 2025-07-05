@@ -18,11 +18,9 @@ export const fetchUsersData = async () => {
                       ...matchingUser,
                       maxRating: cf_user.maxRating || 0,
                       rating: cf_user.rating || 0,
-                      year: parseInt(matchingUser.regId.slice(0, 4)),
-                      branch: matchingUser.regId.slice(6, 8),
                     };
                 }
-                return {...cf_user, name: "John Doe", regId: "0000DDXX000", year: 0, branch: "XX"};
+                return {...cf_user, name: "Unknown", regId: "0000DDXX000", year: 0, branch: ""};
             });
             return mergedData;
         } else {

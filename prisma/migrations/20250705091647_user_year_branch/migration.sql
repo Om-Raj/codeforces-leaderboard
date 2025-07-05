@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "branch" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "year" INTEGER NOT NULL DEFAULT 0;
