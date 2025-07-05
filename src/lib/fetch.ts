@@ -6,6 +6,9 @@ export const fetchUsersData = async () => {
     try {
         const users: User[] = await prisma.user.findMany();
         const handles = users.map((user: User) => user.handle).join(';');
+        if (handles.length === 0) {
+            return [];
+        }
 
         const response = await fetch(`https://codeforces.com/api/user.info?handles=${handles}`);
         const data = await response.json();

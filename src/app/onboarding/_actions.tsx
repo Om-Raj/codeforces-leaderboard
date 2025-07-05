@@ -1,7 +1,7 @@
 'use server'
 
 import prisma from '@/lib/prisma'
-import { capitalizeWords } from '@/lib/utils';
+import { capitalizeWords, verifyToken } from '@/lib/utils';
 import { auth, clerkClient } from '@clerk/nextjs/server'
 import { z } from 'zod'
 
@@ -35,7 +35,14 @@ export const completeOnboarding = async (formData: FormData) => {
       return { error: 'Invalid registration ID format' }
     }
 
+    const token = formData.get('token') as string;
     const handle = formData.get('handle') as string;
+
+    const { error } = verifyToken(token, handle);
+    if (!!error) {
+      return { error };
+    }
+
     const year = parseInt(regId.slice(0, 4));
     const branch = regId.slice(6, 8);
 
