@@ -3,15 +3,17 @@
 import { SignUp } from "@clerk/nextjs";
 import { useCurrentTheme } from "@/hooks/use-current-theme";
 import { dark } from "@clerk/themes";
+import { BadgeInfoIcon } from "lucide-react";
 
 const Page = () => {
   const currentTheme = useCurrentTheme();
 
   return (
     <div className="flex flex-col max-w-3xl mx-auto w-full">
-      <section className="space-y-6 pt-[16vh] 2xl:pt-48">
-        <div className="text-center p-2 max-w-sm mx-auto">
-          <p className="text-md text-sky-700 dark:text-sky-300">Sign up using your NIT Jamshedpur email</p>
+      <section className="space-y-4 pt-[16vh] 2xl:pt-48">
+        <div className="flex items-center justify-center gap-2">
+          <BadgeInfoIcon className="w-5 h-5" />
+          <p className="text-md">Sign up using your NIT Jamshedpur email</p>
         </div>
         <div className="flex flex-col justify-center items-center">
           <SignUp 

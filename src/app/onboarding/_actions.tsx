@@ -59,6 +59,7 @@ export const completeOnboarding = async (formData: FormData) => {
       publicMetadata: {
         onboardingComplete: true,
         regId,
+        handle,
       },
     })
     return { message: user }
