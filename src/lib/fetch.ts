@@ -25,8 +25,10 @@ export const fetchUsersData = async () => {
             return mergedData;
         } else {
             console.error('Error fetching user data:', data.comment || 'Unknown error');
+            return [];
         }
     } catch (error) {
         console.error('Error fetching user data:', error);
+        return [];
     }
 };
