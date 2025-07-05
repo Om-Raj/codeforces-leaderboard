@@ -24,11 +24,8 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
@@ -45,72 +42,24 @@ import {
 
 import { UserData } from "@/types/types"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
+import { getRankColorClass, getRatingColorClass } from "@/lib/utils"
+import Image from "next/image"
 
-const data: UserData[] = [
-  {
-    handle: "omium",
-    name: "Om Raj",
-    regId: "2023UCS022",
-    year: 2023,
-    branch: "CS",
-    rating: 1525,
-    maxRating: 1764,
-  },
-  {
-    handle: "coder123",
-    name: "Alice Smith",
-    regId: "2022UCS045",
-    year: 2022,
-    branch: "CS",
-    rating: 1890,
-    maxRating: 1950,
-  },
-  {
-    handle: "bug_hunter",
-    name: "Bob Jones",
-    regId: "2021ECE007",
-    year: 2021,
-    branch: "EC",
-    rating: 1430,
-    maxRating: 1600,
-  },
-  {
-    handle: "math_geek",
-    name: "Carol Danvers",
-    regId: "2020MTH102",
-    year: 2020,
-    branch: "MA",
-    rating: 2100,
-    maxRating: 2200,
-  },
-  {
-    handle: "hackerman",
-    name: "Eve Wright",
-    regId: "2023UCS056",
-    year: 2023,
-    branch: "CS",
-    rating: 980,
-    maxRating: 1200,
-  },
-  {
-    handle: "maverick",
-    name: "John Maverick",
-    regId: "2024MECH011",
-    year: 2024,
-    branch: "ME",
-    rating: 1560,
-    maxRating: 1580,
-  },
-];
 
 
 export const columns: ColumnDef<UserData>[] = [
   {
     id: "rank",
-    header: "Rank",
+    header: ({ column }) => {
+      return (
+        <div className="text-center">Rank</div>
+      )
+    },
     meta: {
       label: "Rank",
       isIndex: true,
+      isCentered: true,
     },
   },
   {
@@ -125,7 +74,18 @@ export const columns: ColumnDef<UserData>[] = [
         href={`https://codeforces.com/profile/${row.getValue("handle")}`}
         target="_blank"
       >
-        {row.getValue("handle")}
+        <div className="flex items-center gap-2">
+          <Image 
+            src={row.original.avatar}
+            alt={row.original.handle}
+            width={20}
+            height={20}
+            className="rounded-full"
+          />
+          <p className={cn("cursor-pointer text-base font-medium", getRankColorClass(row.original.rank))}>
+            {row.getValue("handle")}
+          </p>
+        </div>
       </Link>
     ),
   },
@@ -141,9 +101,16 @@ export const columns: ColumnDef<UserData>[] = [
   },
   {
     accessorKey: "regId",
-    header: "Reg ID",
+    header: ({ column }) => {
+      return (
+        <div className="text-center">
+          Registration ID
+        </div>
+      )
+    },
     meta: {
       label: "Reg ID",
+      isCentered: true,
     },
     cell: ({ row }) => (
       <div>{row.getValue("regId")}</div>
@@ -179,39 +146,76 @@ export const columns: ColumnDef<UserData>[] = [
     accessorKey: "rating",
     meta: {
       label: "Rating",
+      isCentered: true,
     },
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(true)}
-          className="px-0!"
+          className="w-full! cursor-pointer"
+          aria-label="Sort by rating"
         >
           Rating
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div>{row.getValue("rating")}</div>,
+    cell: ({ row }) => (
+      <div className={cn("text-center", getRatingColorClass(row.getValue("rating")))}>
+        {row.getValue("rating")}
+      </div>
+    ),
   },
   {
     accessorKey: "maxRating",
     meta: {
       label: "Max Rating",
+      isCentered: true,
     },
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(true)}
-          className="px-0!"
+          className="w-full! cursor-pointer"
+          aria-label="Sort by max rating"
         >
           Max Rating
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div>{row.getValue("maxRating")}</div>,
+    cell: ({ row }) => (
+      <div className={cn("text-center", getRatingColorClass(row.getValue("maxRating")))}>
+        {row.getValue("maxRating")}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "friendOfCount",
+    meta: {
+      label: "Friends",
+      isCentered: true,
+    },
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(true)}
+          className="w-full! cursor-pointer"
+          aria-label="Sort by friends"
+        >
+          Friends
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="text-center">
+        {row.getValue("friendOfCount")}
+      </div>
+    ),
   },
 ];
 
@@ -360,7 +364,12 @@ export function LeaderBoard({ data }: { data: UserData[] }) {
                   key={row.id}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell 
+                      key={cell.id} 
+                      className={cn(
+                        cell.column.columnDef.meta?.isCentered && "text-center"
+                      )}
+                    >
                       {cell.column.columnDef.meta?.isIndex ? index + 1 : flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

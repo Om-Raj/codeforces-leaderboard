@@ -19,8 +19,7 @@ export const fetchUsersData = async () => {
                 if (matchingUser) {
                     return { 
                       ...matchingUser,
-                      maxRating: cf_user.maxRating || 0,
-                      rating: cf_user.rating || 0,
+                      ...cf_user,
                     };
                 }
                 return {...cf_user, name: "Unknown", regId: "0000DDXX000", year: 0, branch: ""};

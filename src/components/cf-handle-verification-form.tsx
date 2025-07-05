@@ -87,10 +87,10 @@ export default function CFHandleVerificationForm({ handleSubmit, error }: { hand
   };
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-[400px]">
       <CardHeader>
         <CardTitle>
-          <h1 className="text-3xl pb-2 text-center font-bold">Codeforces Verification</h1>
+          <h1 className="text-3xl pb-3 text-center font-bold">Codeforces Verification</h1>
         </CardTitle>
         <CardDescription>
           Enter your codeforces handle below to verify your account
@@ -113,7 +113,7 @@ export default function CFHandleVerificationForm({ handleSubmit, error }: { hand
                 required 
                 className="w-full" 
                 placeholder="username" />
-              <Button type="button" onClick={verifyHandle}>Verify</Button>
+              <Button type="button" onClick={verifyHandle} variant="secondary">Verify</Button>
             </div>
             {status == "pending" && (
               <div className="flex flex-col gap-2">
@@ -129,16 +129,17 @@ export default function CFHandleVerificationForm({ handleSubmit, error }: { hand
                   onClick={checkSubmission} 
                   disabled={submitPending}
                   className="w-full" 
+                  variant="outline"
                 >
-                  Done
+                 Task Done
                 </Button>
               </div>
             )}
             {status == "error" && (
-              <p className="text-red-500">Verification failed. Please try again.</p>
+              <p className="text-destructive">Verification failed. Please try again.</p>
             )}
             {status == "success" && (
-              <p className="text-green-500">Verification successful.</p>
+              <p className="text-accent">Verification successful.</p>
             )}
           </div>
           <Input type="hidden" name="token" value={token} />

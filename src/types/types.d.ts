@@ -4,6 +4,9 @@ export type CF_User = {
   handle: string,
   rating: number,
   maxRating: number,
+  rank: string,
+  avatar: string,
+  friendOfCount: number,
 };
 
 export type UserData = {
@@ -14,11 +17,15 @@ export type UserData = {
   branch: string,
   rating: number,
   maxRating: number,
+  rank: string,
+  avatar: string,
+  friendOfCount: number,
 };
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
     label?: string
     isIndex?: boolean
+    isCentered?: boolean
   }
 }
