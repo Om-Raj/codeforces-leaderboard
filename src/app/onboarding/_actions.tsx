@@ -12,7 +12,7 @@ const regIdSchema = z
 
 
 export const completeOnboarding = async (formData: FormData) => {
-  const { userId,  } = await auth()
+  const { userId } = await auth()
 
   if (!userId) {
     return { error: 'No Logged In User' }
@@ -58,6 +58,7 @@ export const completeOnboarding = async (formData: FormData) => {
     const res = await client.users.updateUser(userId, {
       publicMetadata: {
         onboardingComplete: true,
+        regId,
       },
     })
     return { message: user }

@@ -45,9 +45,9 @@ export const Navbar = () => {
             </div>
           </SignedOut>
           <SignedIn>
-            <Button variant="outline" size="sm">
-              <Link href="/profile">Profile</Link>
-            </Button>
+            <Link href="/change-handle">
+              <Button variant="outline" size="sm">Change Handle</Button>
+            </Link>
             <SignOutButton>
               <Button size="sm">Sign Out</Button>
             </SignOutButton>

@@ -1,23 +1,17 @@
 'use client'
 
-import * as React from 'react'
-import { useUser } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { completeOnboarding } from './_actions'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import CFHandleVerificationForm from '@/components/cf-handle-verification-form'
 
 export default function OnboardingPage() {
-  const [error, setError] = React.useState('')
-  const { user } = useUser()
+  const [error, setError] = useState('')
   const router = useRouter()
 
   const handleSubmit = async (formData: FormData) => {
     const res = await completeOnboarding(formData)
     if (res?.message) {
-      // Reloads the user's data from the Clerk API
-      await user?.reload()
       router.push('/')
     }
     if (res?.error) {

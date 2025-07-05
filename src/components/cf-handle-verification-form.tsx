@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -11,24 +12,25 @@ export default function CFHandleVerificationForm({ handleSubmit, error }: { hand
   const [timeRemaining, setTimeRemaining] = useState<number>(60);
   const [token, setToken] = useState<string>("");
   const [verificationStartedAt, setVerificationStartedAt] = useState<number>(0);
+  const [submitPending, setSubmitPending] = useState<boolean>(false);
   /* TODO: maybe fetch random problem */
   const [contestId, setContestId] = useState<number>(1);
   const [problemIndex, setProblemIndex] = useState<string>("A");
   const [problemName, setProblemName] = useState<string>("Theatre Square");
   const problemUrl = `https://codeforces.com/problemset/problem/${contestId}/${problemIndex}`;
+  let timeout: NodeJS.Timeout;
+  let interval: NodeJS.Timeout;
 
   const verifyHandle = async () => {
     setStatus("pending");
     setTimeRemaining(60);
     setVerificationStartedAt(Math.floor(Date.now() / 1000)); // in seconds
-    const interval = setInterval(() => {
+    interval = setInterval(() => {
       setTimeRemaining(prev => prev - 1);
     }, 1000);
-    setTimeout(() => {
+    timeout = setTimeout(() => {
       clearInterval(interval);
-      if (status === "pending") {
-        setStatus("error");
-      }
+      setStatus("error");
     }, 60000);
   }
 
@@ -47,22 +49,27 @@ export default function CFHandleVerificationForm({ handleSubmit, error }: { hand
     if (data.token) {
       setToken(data.token);
       setStatus("success");
+      if (interval) clearInterval(interval);
+      if (timeout) clearTimeout(timeout);
     } else {
       setStatus("error");
       console.log(data.error);
     }
   }
 
+  const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (status === "success" && !submitPending) {
+      setSubmitPending(true);
+      const formData = new FormData(e.currentTarget);
+      handleSubmit(formData);
+    }
+  };
+
   return (
     <form 
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (status === "success") {
-          const formData = new FormData(e.currentTarget);
-          handleSubmit(formData);
-        }
-      }} 
-      className="flex flex-col gap-4 w-full max-w-sm"
+      onSubmit={(e) => formSubmit(e)} 
+      className="flex flex-col gap-6 w-full max-w-xs"
     >
       <h1 className="text-2xl font-bold">Codeforces Verification</h1>
       <div className="flex flex-col gap-2">
@@ -77,11 +84,11 @@ export default function CFHandleVerificationForm({ handleSubmit, error }: { hand
             <p>
               Submit a compilation error using this account on the problem:&nbsp;
               <Link href={problemUrl} target="_blank" className="text-blue-500 hover:underline">
-                {problemName}
+                {contestId + problemIndex + " - " + problemName}
               </Link>
             </p>
             <p>Time remaining: {timeRemaining}s </p>
-            <Button type="button" onClick={checkSubmission}>Done</Button>
+            <Button type="button" onClick={checkSubmission} disabled={submitPending}>Done</Button>
           </div>
         )}
         {status == "error" && (
@@ -93,7 +100,9 @@ export default function CFHandleVerificationForm({ handleSubmit, error }: { hand
       </div>
       <Input type="hidden" name="token" value={token} />
       {error && <p className="text-red-600">Error: {error}</p>}
-      <Button type="submit" disabled={status !== "success"}>Submit</Button>
+      <Button type="submit" disabled={status !== "success" || submitPending}>
+        {submitPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Submit"}
+      </Button>
     </form>
   )
 }
