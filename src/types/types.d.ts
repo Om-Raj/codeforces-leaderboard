@@ -20,6 +20,7 @@ export type UserData = {
   rank: string,
   avatar: string,
   friendOfCount: number,
+  contribution: number,
 };
 
 declare module '@tanstack/react-table' {

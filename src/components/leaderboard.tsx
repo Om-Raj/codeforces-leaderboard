@@ -74,7 +74,7 @@ export const columns: ColumnDef<UserData>[] = [
         href={`https://codeforces.com/profile/${row.getValue("handle")}`}
         target="_blank"
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pr-[20]">
           <Image 
             src={row.original.avatar}
             alt={row.original.handle}
@@ -101,16 +101,9 @@ export const columns: ColumnDef<UserData>[] = [
   },
   {
     accessorKey: "regId",
-    header: ({ column }) => {
-      return (
-        <div className="text-center">
-          Registration ID
-        </div>
-      )
-    },
+    header: "Reg ID",
     meta: {
       label: "Reg ID",
-      isCentered: true,
     },
     cell: ({ row }) => (
       <div>{row.getValue("regId")}</div>
@@ -217,6 +210,31 @@ export const columns: ColumnDef<UserData>[] = [
       </div>
     ),
   },
+  {
+    accessorKey: "contribution",
+    meta: {
+      label: "Contribution",
+      isCentered: true,
+    },
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(true)}
+          className="w-full! cursor-pointer"
+          aria-label="Sort by contribution"
+        >
+          Contribution
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="text-center">
+        {row.getValue("contribution")}
+      </div>
+    ),
+  },
 ];
 
 export function LeaderBoard({ data }: { data: UserData[] }) {
@@ -230,6 +248,8 @@ export function LeaderBoard({ data }: { data: UserData[] }) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     year: false,
     branch: false,
+    friendOfCount: false,
+    contribution: false,
   });
 
   const batches = useMemo(() => [...new Set(data.map((item) => item.year))].sort(), [data]);

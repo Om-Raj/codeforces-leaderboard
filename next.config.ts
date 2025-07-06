@@ -3,7 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ['userpic.codeforces.org'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'userpic.codeforces.org',
+      },
+    ],
   },
 };
 
