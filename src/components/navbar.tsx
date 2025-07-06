@@ -113,12 +113,15 @@ export const Navbar = () => {
               className="hover:text-secondary-foreground"
             >
               <Button variant="ghost" size="sm" className="w-full mx-auto">
-                <Image
-                  src={theme === "dark" ? "./github-white.svg" : "./github.svg"}
-                  alt="Github"
-                  width={20}
-                  height={20}
-                />
+                {theme && (
+                  <Image
+                    src={theme === "dark" ? "/github-white.svg" : "/github.svg"}
+                    alt="GitHub"
+                    width={20}
+                    height={20}
+                    className="mr-2"
+                  />
+                )}
               </Button>
             </Link>
             <SignedOut>
