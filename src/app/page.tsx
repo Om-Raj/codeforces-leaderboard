@@ -1,6 +1,8 @@
 import { LeaderBoard } from "@/components/leaderboard";
 import { fetchUsersData } from "@/lib/fetch";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const { users, error } = await fetchUsersData();
   return (

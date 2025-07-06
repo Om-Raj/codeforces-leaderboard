@@ -46,7 +46,7 @@ export const completeOnboarding = async (formData: FormData) => {
     const year = parseInt(regId.slice(0, 4));
     const branch = regId.slice(6, 8);
 
-    const user = prisma.user.create({
+    await prisma.user.create({
       data: {
         regId,
         name: capitalizeWords(clerkUser.fullName ?? "Unknown"),
@@ -55,6 +55,7 @@ export const completeOnboarding = async (formData: FormData) => {
         branch,
       },
     });
+    
     await client.users.updateUser(userId, {
       publicMetadata: {
         onboardingComplete: true,
@@ -62,8 +63,10 @@ export const completeOnboarding = async (formData: FormData) => {
         handle,
       },
     });
-    return { message: user };
+    
+    return { message: "User created successfully!" };
   } catch (err) {
-    return { error: "Error in completing user onboarding. " + (err as Error).message };
+    console.error("Onboarding error:", err);
+    return { error: "Error in completing user onboarding. " + (err instanceof Error ? err.message : String(err)) };
   }
 };
