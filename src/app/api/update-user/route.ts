@@ -1,13 +1,13 @@
-import prisma from '@/lib/prisma'
-import { verifyToken } from '@/lib/utils';
-import { auth, clerkClient } from '@clerk/nextjs/server'
-import { NextRequest, NextResponse } from 'next/server';
+import prisma from "@/lib/prisma";
+import { verifyToken } from "@/lib/utils";
+import { auth, clerkClient } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ error: 'No Logged In User' }, { status: 401 });
+    return NextResponse.json({ error: "No Logged In User" }, { status: 401 });
   }
 
   try {
@@ -15,7 +15,10 @@ export async function POST(request: NextRequest) {
     const { handle, token } = body;
 
     if (!handle || !token) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 },
+      );
     }
 
     const client = await clerkClient();
@@ -24,7 +27,10 @@ export async function POST(request: NextRequest) {
     const currentHandle = clerkUser.publicMetadata.handle as string;
 
     if (currentHandle === handle) {
-      return NextResponse.json({ message: 'Handle is already set to this value' }, { status: 200 });
+      return NextResponse.json(
+        { message: "Handle is already set to this value" },
+        { status: 200 },
+      );
     }
 
     const { error } = verifyToken(token, handle);
@@ -38,7 +44,7 @@ export async function POST(request: NextRequest) {
       },
       data: {
         handle,
-      }
+      },
     });
 
     // Update Clerk metadata
@@ -49,9 +55,15 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ message: 'User updated successfully', user }, { status: 200 });
+    return NextResponse.json(
+      { message: "User updated successfully", user },
+      { status: 200 },
+    );
   } catch (err) {
-    console.error('Error updating user:', err);
-    return NextResponse.json({ error: 'Failed to update user' }, { status: 500 });
+    console.error("Error updating user:", err);
+    return NextResponse.json(
+      { error: "Failed to update user" },
+      { status: 500 },
+    );
   }
 }

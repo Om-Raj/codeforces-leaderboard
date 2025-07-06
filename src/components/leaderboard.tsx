@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useMemo, useState } from "react"
+import { useMemo, useState } from "react";
 
 import {
   ColumnDef,
@@ -14,11 +14,11 @@ import {
   SortingState,
   useReactTable,
   VisibilityState,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 import {
   DropdownMenu,
@@ -27,9 +27,9 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input";
 
 import {
   Table,
@@ -38,23 +38,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
-import { UserData } from "@/types/types"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
-import { getRankColorClass, getRatingColorClass } from "@/lib/utils"
-import Image from "next/image"
-
-
+import { UserData } from "@/types/types";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { getRankColorClass, getRatingColorClass } from "@/lib/utils";
+import Image from "next/image";
 
 export const columns: ColumnDef<UserData>[] = [
   {
     id: "rank",
     header: ({ column }) => {
-      return (
-        <div className="text-center">Rank</div>
-      )
+      return <div className="text-center">Rank</div>;
     },
     meta: {
       label: "Rank",
@@ -69,20 +65,25 @@ export const columns: ColumnDef<UserData>[] = [
       label: "Handle",
     },
     cell: ({ row }) => (
-      <Link 
-        prefetch={false} 
+      <Link
+        prefetch={false}
         href={`https://codeforces.com/profile/${row.getValue("handle")}`}
         target="_blank"
       >
         <div className="flex items-center gap-2 pr-[20]">
-          <Image 
+          <Image
             src={row.original.avatar}
             alt={row.original.handle}
             width={20}
             height={20}
             className="rounded-full"
           />
-          <p className={cn("cursor-pointer text-base font-medium", getRankColorClass(row.original.rank))}>
+          <p
+            className={cn(
+              "cursor-pointer text-base font-medium",
+              getRankColorClass(row.original.rank),
+            )}
+          >
             {row.getValue("handle")}
           </p>
         </div>
@@ -95,9 +96,7 @@ export const columns: ColumnDef<UserData>[] = [
     meta: {
       label: "Name",
     },
-    cell: ({ row }) => (
-      <div>{row.getValue("name")}</div>
-    ),
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
     accessorKey: "regId",
@@ -105,9 +104,7 @@ export const columns: ColumnDef<UserData>[] = [
     meta: {
       label: "Reg ID",
     },
-    cell: ({ row }) => (
-      <div>{row.getValue("regId")}</div>
-    ),
+    cell: ({ row }) => <div>{row.getValue("regId")}</div>,
   },
   {
     accessorKey: "year",
@@ -115,9 +112,7 @@ export const columns: ColumnDef<UserData>[] = [
     meta: {
       label: "Year",
     },
-    cell: ({ row }) => (
-      <div>{row.getValue("year")}</div>
-    ),
+    cell: ({ row }) => <div>{row.getValue("year")}</div>,
     filterFn: (row: Row<UserData>, id: string, year: number) => {
       return !year || row.original.year === year;
     },
@@ -128,9 +123,7 @@ export const columns: ColumnDef<UserData>[] = [
     meta: {
       label: "Branch",
     },
-    cell: ({ row }) => (
-      <div>{row.getValue("branch")}</div>
-    ),
+    cell: ({ row }) => <div>{row.getValue("branch")}</div>,
     filterFn: (row: Row<UserData>, id: string, branch: string) => {
       return branch === "all" || row.original.branch === branch;
     },
@@ -152,10 +145,15 @@ export const columns: ColumnDef<UserData>[] = [
           Rating
           <ArrowUpDown />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => (
-      <div className={cn("text-center", getRatingColorClass(row.getValue("rating")))}>
+      <div
+        className={cn(
+          "text-center",
+          getRatingColorClass(row.getValue("rating")),
+        )}
+      >
         {row.getValue("rating")}
       </div>
     ),
@@ -177,10 +175,15 @@ export const columns: ColumnDef<UserData>[] = [
           Max Rating
           <ArrowUpDown />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => (
-      <div className={cn("text-center", getRatingColorClass(row.getValue("maxRating")))}>
+      <div
+        className={cn(
+          "text-center",
+          getRatingColorClass(row.getValue("maxRating")),
+        )}
+      >
         {row.getValue("maxRating")}
       </div>
     ),
@@ -202,12 +205,10 @@ export const columns: ColumnDef<UserData>[] = [
           Friends
           <ArrowUpDown />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => (
-      <div className="text-center">
-        {row.getValue("friendOfCount")}
-      </div>
+      <div className="text-center">{row.getValue("friendOfCount")}</div>
     ),
   },
   {
@@ -227,12 +228,10 @@ export const columns: ColumnDef<UserData>[] = [
           Contribution
           <ArrowUpDown />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => (
-      <div className="text-center">
-        {row.getValue("contribution")}
-      </div>
+      <div className="text-center">{row.getValue("contribution")}</div>
     ),
   },
 ];
@@ -252,8 +251,14 @@ export function LeaderBoard({ data }: { data: UserData[] }) {
     contribution: false,
   });
 
-  const batches = useMemo(() => [...new Set(data.map((item) => item.year))].sort(), [data]);
-  const branches = useMemo(() => [...new Set(data.map((item) => item.branch))].sort(), [data]);
+  const batches = useMemo(
+    () => [...new Set(data.map((item) => item.year))].sort(),
+    [data],
+  );
+  const branches = useMemo(
+    () => [...new Set(data.map((item) => item.branch))].sort(),
+    [data],
+  );
 
   const table = useReactTable({
     data,
@@ -270,7 +275,7 @@ export function LeaderBoard({ data }: { data: UserData[] }) {
       columnFilters,
       columnVisibility,
     },
-  })
+  });
 
   return (
     <div className="w-full">
@@ -293,15 +298,20 @@ export function LeaderBoard({ data }: { data: UserData[] }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuRadioGroup
-                value={(table.getColumn("year")?.getFilterValue() ?? 0).toString()}
-                onValueChange={(year) => table.getColumn("year")?.setFilterValue(parseInt(year))}>
+                value={(
+                  table.getColumn("year")?.getFilterValue() ?? 0
+                ).toString()}
+                onValueChange={(year) =>
+                  table.getColumn("year")?.setFilterValue(parseInt(year))
+                }
+              >
                 <DropdownMenuRadioItem value="0">All</DropdownMenuRadioItem>
                 {batches.map((year) => {
                   return (
                     <DropdownMenuRadioItem key={year} value={year.toString()}>
                       {year}
                     </DropdownMenuRadioItem>
-                  )
+                  );
                 })}
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
@@ -315,15 +325,21 @@ export function LeaderBoard({ data }: { data: UserData[] }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuRadioGroup
-                value={table.getColumn("branch")?.getFilterValue() as string ?? "all"}
-                onValueChange={(branch) => table.getColumn("branch")?.setFilterValue(branch)}>
+                value={
+                  (table.getColumn("branch")?.getFilterValue() as string) ??
+                  "all"
+                }
+                onValueChange={(branch) =>
+                  table.getColumn("branch")?.setFilterValue(branch)
+                }
+              >
                 <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
                 {branches.map((branch) => {
                   return (
                     <DropdownMenuRadioItem key={branch} value={branch}>
                       {branch}
                     </DropdownMenuRadioItem>
-                  )
+                  );
                 })}
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
@@ -351,7 +367,7 @@ export function LeaderBoard({ data }: { data: UserData[] }) {
                     >
                       {column.columnDef.meta?.label ?? column.id}
                     </DropdownMenuCheckboxItem>
-                  )
+                  );
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -369,10 +385,10 @@ export function LeaderBoard({ data }: { data: UserData[] }) {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -380,20 +396,20 @@ export function LeaderBoard({ data }: { data: UserData[] }) {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row, index) => (
-                <TableRow
-                  key={row.id}
-                >
+                <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell 
-                      key={cell.id} 
+                    <TableCell
+                      key={cell.id}
                       className={cn(
-                        cell.column.columnDef.meta?.isCentered && "text-center"
+                        cell.column.columnDef.meta?.isCentered && "text-center",
                       )}
                     >
-                      {cell.column.columnDef.meta?.isIndex ? index + 1 : flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )} 
+                      {cell.column.columnDef.meta?.isIndex
+                        ? index + 1
+                        : flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -412,5 +428,5 @@ export function LeaderBoard({ data }: { data: UserData[] }) {
         </Table>
       </div>
     </div>
-  )
+  );
 }

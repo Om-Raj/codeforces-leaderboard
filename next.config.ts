@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'userpic.codeforces.org',
+        protocol: "https",
+        hostname: "userpic.codeforces.org",
       },
     ],
   },

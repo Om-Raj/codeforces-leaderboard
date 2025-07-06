@@ -1,42 +1,42 @@
-'use server'
+"use server";
 
-import prisma from '@/lib/prisma'
-import { capitalizeWords, verifyToken } from '@/lib/utils';
-import { auth, clerkClient } from '@clerk/nextjs/server'
-import { z } from 'zod'
-
+import prisma from "@/lib/prisma";
+import { capitalizeWords, verifyToken } from "@/lib/utils";
+import { auth, clerkClient } from "@clerk/nextjs/server";
+import { z } from "zod";
 
 const regIdSchema = z
   .string()
-  .regex(/^\d{4}[A-Z]{2}[A-Z]{2}\d{3}$/, 'Invalid registration ID format');
-
+  .regex(/^\d{4}[A-Z]{2}[A-Z]{2}\d{3}$/, "Invalid registration ID format");
 
 export const completeOnboarding = async (formData: FormData) => {
-  const { userId } = await auth()
+  const { userId } = await auth();
 
   if (!userId) {
-    return { error: 'No Logged In User' }
+    return { error: "No Logged In User" };
   }
 
-  const client = await clerkClient()
+  const client = await clerkClient();
 
   try {
     const clerkUser = await client.users.getUser(userId);
     const email = clerkUser.primaryEmailAddress?.emailAddress ?? "";
 
     if (!email) {
-      return { error: 'No valid primary email address found' }
+      return { error: "No valid primary email address found" };
     }
 
-    const regId: z.infer<typeof regIdSchema> = email.split('@')[0].toUpperCase();
+    const regId: z.infer<typeof regIdSchema> = email
+      .split("@")[0]
+      .toUpperCase();
     const parsedRegId = regIdSchema.safeParse(regId);
 
     if (!parsedRegId.success) {
-      return { error: 'Invalid registration ID format' }
+      return { error: "Invalid registration ID format" };
     }
 
-    const token = formData.get('token') as string;
-    const handle = formData.get('handle') as string;
+    const token = formData.get("token") as string;
+    const handle = formData.get("handle") as string;
 
     const { error } = verifyToken(token, handle);
     if (!!error) {
@@ -53,7 +53,7 @@ export const completeOnboarding = async (formData: FormData) => {
         handle,
         year,
         branch,
-      }
+      },
     });
     const res = await client.users.updateUser(userId, {
       publicMetadata: {
@@ -61,9 +61,9 @@ export const completeOnboarding = async (formData: FormData) => {
         regId,
         handle,
       },
-    })
-    return { message: user }
+    });
+    return { message: user };
   } catch (err) {
-    return { error: 'There was an error in completing user onboarding.' }
+    return { error: "There was an error in completing user onboarding." };
   }
-}
+};

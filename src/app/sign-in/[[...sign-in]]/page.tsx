@@ -16,12 +16,12 @@ const Page = () => {
           <p className="text-md">Sign in using your NIT Jamshedpur email</p>
         </div>
         <div className="flex flex-col justify-center items-center">
-          <SignIn 
+          <SignIn
             appearance={{
               baseTheme: currentTheme === "dark" ? dark : undefined,
               elements: {
                 cardBox: "border! shadow-none! rounded-lg!",
-              }
+              },
             }}
           />
         </div>

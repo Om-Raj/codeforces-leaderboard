@@ -20,7 +20,7 @@ export function ClientLeaderBoard() {
           showErrorToast: true,
           errorMessage: "Failed to load leaderboard data",
         });
-        
+
         if (data?.users) {
           setUsers(data.users);
         }
@@ -44,4 +44,4 @@ export function ClientLeaderBoard() {
   }
 
   return <LeaderBoard data={users} />;
-} 
+}

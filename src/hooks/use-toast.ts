@@ -15,7 +15,7 @@ export const useToast = () => {
   const showToast = (
     message: string,
     type: ToastType = "info",
-    options?: ToastOptions
+    options?: ToastOptions,
   ) => {
     switch (type) {
       case "success":
@@ -36,13 +36,13 @@ export const useToast = () => {
 
   return {
     toast: showToast,
-    success: (message: string, options?: ToastOptions) => 
+    success: (message: string, options?: ToastOptions) =>
       showToast(message, "success", options),
-    error: (message: string, options?: ToastOptions) => 
+    error: (message: string, options?: ToastOptions) =>
       showToast(message, "error", options),
-    warning: (message: string, options?: ToastOptions) => 
+    warning: (message: string, options?: ToastOptions) =>
       showToast(message, "warning", options),
-    info: (message: string, options?: ToastOptions) => 
+    info: (message: string, options?: ToastOptions) =>
       showToast(message, "info", options),
   };
-}; 
+};
