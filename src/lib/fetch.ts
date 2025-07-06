@@ -5,21 +5,16 @@ import { User } from "@/generated/prisma";
 export const fetchUsersData = async () => {
   try {
     const users: User[] = await prisma.user.findMany();
-    const handles = users.map((user: User) => user.handle).join(";");
-    if (handles.length === 0) {
+    if (users.length === 0) {
       return { users: [], error: "No users found" };
     }
 
-    const response = await fetch(
-      `https://codeforces.com/api/user.info?handles=${handles}`,
-      {
-        next: { revalidate: 300 }, // Cache for 5 minutes
-      },
-    );
+    const handles = users.map((user: User) => user.handle).join(";");
+    const response = await fetch(`https://codeforces.com/api/user.info?handles=${handles}`);
 
     if (!response.ok) {
       console.error("HTTP error:", response.status);
-      return { users: [], error: `HTTP ${response.status}` };
+      return { users: [], error: `HTTP ${response.status}: ${await response.text()}` };
     }
 
     const data = await response.json();
@@ -35,7 +30,7 @@ export const fetchUsersData = async () => {
             branch: "",
           }),
       }));
-      return { users: mergedData };
+      return { users: mergedData, error: "" };
     } else {
       console.error(
         "Error fetching Codeforces user data:",

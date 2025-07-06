@@ -4,11 +4,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import CFHandleVerificationForm from "@/components/cf-handle-verification-form";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@clerk/nextjs";
 
 export default function OnboardingPage() {
   const [error, setError] = useState("");
   const router = useRouter();
   const { success, error: showError } = useToast();
+  const { getToken } = useAuth();
 
   const handleSubmit = async (formData: FormData) => {
     try {
@@ -37,6 +39,8 @@ export default function OnboardingPage() {
         return;
       }
 
+      // Force a session refresh to update the claims with new metadata
+      await getToken({ skipCache: true });
       success("Handle updated successfully!");
       router.push("/");
     } catch (error) {

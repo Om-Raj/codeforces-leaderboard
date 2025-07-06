@@ -14,11 +14,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/theme-toggle";
 import { Menu, X } from "lucide-react";
-import { useCurrentTheme } from "@/hooks/use-current-theme";
+import { FaGithub } from "react-icons/fa";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const theme = useCurrentTheme();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -67,13 +66,7 @@ export const Navbar = () => {
             target="_blank"
             className="hover:text-secondary-foreground"
           >
-            <Image
-              src={theme === "dark" ? "./github-white.svg" : "./github.svg"}
-              alt="Github"
-              width={20}
-              height={20}
-              className="mr-2"
-            />
+            <FaGithub className="h-6 w-6" />
           </Link>
           <SignedOut>
             <div className="flex gap-2">
@@ -112,17 +105,7 @@ export const Navbar = () => {
               target="_blank"
               className="hover:text-secondary-foreground"
             >
-              <Button variant="ghost" size="sm" className="w-full mx-auto">
-                {theme && (
-                  <Image
-                    src={theme === "dark" ? "/github-white.svg" : "/github.svg"}
-                    alt="GitHub"
-                    width={20}
-                    height={20}
-                    className="mr-2"
-                  />
-                )}
-              </Button>
+              <FaGithub className="h-6 w-6" />
             </Link>
             <SignedOut>
               <div className="flex flex-col gap-4 w-full">

@@ -28,7 +28,7 @@ export function verifyToken(token: string, handle: string) {
         return { error: "Handle mismatch" };
       }
     } catch (err) {
-      return { error: "Invalid token. " + (err as Error).message };
+      return { error: "Invalid token. " + (err instanceof Error ? err.message : String(err)) };
     }
   } else {
     return { error: "No token provided" };
