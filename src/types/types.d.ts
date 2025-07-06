@@ -24,7 +24,7 @@ export type UserData = {
 };
 
 declare module "@tanstack/react-table" {
-  interface ColumnMeta<TData extends RowData, TValue> {
+  interface ColumnMeta {
     label?: string;
     isIndex?: boolean;
     isCentered?: boolean;

@@ -55,7 +55,7 @@ export const completeOnboarding = async (formData: FormData) => {
         branch,
       },
     });
-    const res = await client.users.updateUser(userId, {
+    await client.users.updateUser(userId, {
       publicMetadata: {
         onboardingComplete: true,
         regId,
@@ -64,6 +64,6 @@ export const completeOnboarding = async (formData: FormData) => {
     });
     return { message: user };
   } catch (err) {
-    return { error: "There was an error in completing user onboarding." };
+    return { error: "Error in completing user onboarding. " + (err as Error).message };
   }
 };

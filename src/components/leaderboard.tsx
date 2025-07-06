@@ -16,7 +16,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -49,9 +49,7 @@ import Image from "next/image";
 export const columns: ColumnDef<UserData>[] = [
   {
     id: "rank",
-    header: ({ column }) => {
-      return <div className="text-center">Rank</div>;
-    },
+    header: () => <div className="text-center">Rank</div>,
     meta: {
       label: "Rank",
       isIndex: true,
@@ -236,7 +234,7 @@ export const columns: ColumnDef<UserData>[] = [
   },
 ];
 
-export function LeaderBoard({ data }: { data: UserData[] }) {
+export function LeaderBoard({ data, error }: { data: UserData[], error?: string }) {
   const [sorting, setSorting] = useState<SortingState>([
     {
       id: "rating",
@@ -420,7 +418,7 @@ export function LeaderBoard({ data }: { data: UserData[] }) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {error ? error : "No results."}
                 </TableCell>
               </TableRow>
             )}

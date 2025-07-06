@@ -31,9 +31,9 @@ export default function CFHandleVerificationForm({
   const [submitPending, setSubmitPending] = useState<boolean>(false);
   const { success, error: showError } = useToast();
   /* TODO: maybe fetch random problem */
-  const [contestId, setContestId] = useState<number>(1);
-  const [problemIndex, setProblemIndex] = useState<string>("A");
-  const [problemName, setProblemName] = useState<string>("Theatre Square");
+  const contestId = 1;
+  const problemIndex = "A";
+  const problemName = "Theatre Square";
   const problemUrl = `https://codeforces.com/problemset/problem/${contestId}/${problemIndex}`;
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
