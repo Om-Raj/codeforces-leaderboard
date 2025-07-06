@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   ColumnDef,
@@ -45,6 +45,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { getRankColorClass, getRatingColorClass } from "@/lib/utils";
 import Image from "next/image";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const columns: ColumnDef<UserData>[] = [
   {
@@ -241,13 +242,30 @@ export function LeaderBoard({ data, error }: { data: UserData[], error?: string 
       desc: true,
     },
   ]);
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-    year: false,
-    branch: false,
-    friendOfCount: false,
-    contribution: false,
-  });
+      regId: false,
+      friendOfCount: false,
+      contribution: false,
+    });
+
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    setColumnVisibility(isMobile ? {
+      handle: false,
+      regId: false,
+      year: false,
+      branch: false,
+      friendOfCount: false,
+      contribution: false,
+      } : {
+      regId: false,
+      friendOfCount: false,
+      contribution: false,
+    });
+  }, [isMobile]);
 
   const batches = useMemo(
     () => [...new Set(data.map((item) => item.year))].sort(),
@@ -378,7 +396,9 @@ export function LeaderBoard({ data, error }: { data: UserData[], error?: string 
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className={cn(
+                      header.id === sorting[0].id && "bg-muted text-secondary-foreground",
+                    )}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(

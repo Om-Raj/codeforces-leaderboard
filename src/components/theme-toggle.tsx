@@ -21,9 +21,9 @@ const ThemeToggle = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="focus-visible:ring-0 hover:bg-transparent hover:opacity-75 transition-opacity pl-2!"
+          className="border-none ring-0 hover:bg-transparent hover:text-secondary-foreground pl-2!"
         >
-          <SunMoonIcon className="size-6 text-muted-foreground" />
+          <SunMoonIcon className="size-7" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" side="bottom">

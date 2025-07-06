@@ -105,17 +105,17 @@ export const Navbar = () => {
               target="_blank"
               className="hover:text-secondary-foreground"
             >
-              <FaGithub className="h-6 w-6" />
+              <FaGithub className="h-6 w-6 mx-auto" />
             </Link>
             <SignedOut>
               <div className="flex flex-col gap-4 w-full">
                 <SignUpButton>
-                  <Button variant="outline" size="sm" className="w-full">
+                  <Button variant="outline" size="sm" className="w-full" onClick={toggleMenu}>
                     Sign Up
                   </Button>
                 </SignUpButton>
                 <SignInButton>
-                  <Button size="sm" variant="secondary" className="w-full">
+                  <Button size="sm" variant="secondary" className="w-full" onClick={toggleMenu}>
                     Sign In
                   </Button>
                 </SignInButton>
@@ -123,13 +123,13 @@ export const Navbar = () => {
             </SignedOut>
             <SignedIn>
               <div className="flex flex-col gap-4 w-full">
-                <Link href="/change-handle" className="w-full">
+                <Link href="/change-handle" className="w-full" onClick={toggleMenu}>
                   <Button variant="outline" size="sm" className="w-full">
                     Change Handle
                   </Button>
                 </Link>
                 <SignOutButton>
-                  <Button size="sm" className="w-full">
+                  <Button size="sm" className="w-full" onClick={toggleMenu}>
                     Sign Out
                   </Button>
                 </SignOutButton>
