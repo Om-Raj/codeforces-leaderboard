@@ -7,11 +7,13 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/theme-toggle";
-import { Github, LucideGithub, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { useCurrentTheme } from "@/hooks/use-current-theme";
 
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const theme = useCurrentTheme();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -56,10 +58,7 @@ export const Navbar = () => {
         <div className="hidden md:flex items-center gap-2">
           <ThemeToggle />
           <Link href="https://github.com/Om-Raj/codeforces-leaderboard" target="_blank" className="hover:text-secondary-foreground">
-            <Button variant="ghost" size="sm">
-              <LucideGithub className="h-5 w-5" />
-              Repo
-            </Button>
+            <Image src={theme === "dark" ? "./github-white.svg" : "./github.svg"} alt="Github" width={20} height={20} className="mr-2"/>
           </Link>
           <SignedOut>
             <div className="flex gap-2">
@@ -91,8 +90,7 @@ export const Navbar = () => {
             <ThemeToggle />
             <Link href="https://github.com/Om-Raj/codeforces-leaderboard" target="_blank" className="hover:text-secondary-foreground">
               <Button variant="ghost" size="sm" className="w-full mx-auto">
-                <LucideGithub className="h-5 w-5" />
-                Repo
+                <Image src={theme === "dark" ? "./github-white.svg" : "./github.svg"} alt="Github" width={20} height={20} />
               </Button>
             </Link>
             <SignedOut>
