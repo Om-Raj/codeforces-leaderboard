@@ -20,10 +20,10 @@ export const fetchUsersData = async () => {
     const data = await response.json();
 
     if (data.status === "OK") {
-      const userMap = new Map(users.map((user) => [user.handle, user]));
+      const userMap = new Map(users.map((user) => [user.handle.toLowerCase(), user]));
       const mergedData: UserData[] = data.result.map((cf_user: CF_User) => ({
           ...cf_user,
-          ...(userMap.get(cf_user.handle) ?? {
+          ...(userMap.get(cf_user.handle.toLowerCase()) ?? {
             name: "Unknown",
             regId: "0000DDXX000",
             year: 0,

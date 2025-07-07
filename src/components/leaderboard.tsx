@@ -291,6 +291,11 @@ export function LeaderBoard({ data, error }: { data: UserData[], error?: string 
       columnFilters,
       columnVisibility,
     },
+    initialState: {
+      pagination: {
+        pageSize: 1000,
+      },
+    },
   });
 
   return (
@@ -389,7 +394,7 @@ export function LeaderBoard({ data, error }: { data: UserData[], error?: string 
           </DropdownMenu>
         </div>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border mb-20">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
